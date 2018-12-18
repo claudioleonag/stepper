@@ -8,7 +8,7 @@
 
 #include "tm4c1294ncpdt.h"
 
-#define GPIO_PORTAS (0x5FB7) //bits 8 e 12 2_0101 1111 1011 0111 A B C E K L M N Q
+#define GPIO_PORTAS (0x5F87) //bits 8 e 12 2_0101 1111 1000 0111 A B C K L M N Q
 
 void SysTick_Wait1ms(uint32_t delay);
 // -------------------------------------------------------------------------------
@@ -32,8 +32,6 @@ void GPIO_Init(void)
 	GPIO_PORTJ_AHB_AMSEL_R = 0x00;
 	GPIO_PORTA_AHB_AMSEL_R = 0x00;
 	GPIO_PORTB_AHB_AMSEL_R = 0x00;
-	GPIO_PORTE_AHB_AMSEL_R = 0x00;
-	GPIO_PORTF_AHB_AMSEL_R = 0x00;
 	GPIO_PORTH_AHB_AMSEL_R = 0x00;
 	GPIO_PORTK_AMSEL_R = 0x00;
 	GPIO_PORTL_AMSEL_R = 0x00;
@@ -48,8 +46,6 @@ void GPIO_Init(void)
 	GPIO_PORTJ_AHB_PCTL_R = 0x00;
 	GPIO_PORTA_AHB_PCTL_R = 0x00;
 	GPIO_PORTB_AHB_PCTL_R = 0x00;
-	GPIO_PORTE_AHB_PCTL_R = 0x00;
-	GPIO_PORTF_AHB_PCTL_R = 0x00;
 	GPIO_PORTH_AHB_PCTL_R = 0x00;
 	GPIO_PORTK_PCTL_R = 0x00;
 	GPIO_PORTL_PCTL_R = 0x00;
@@ -62,8 +58,6 @@ void GPIO_Init(void)
 	GPIO_PORTJ_AHB_DIR_R = 0x00;
 	GPIO_PORTA_AHB_DIR_R = 0xF0; 			//2_11110000
 	GPIO_PORTB_AHB_DIR_R = 0x30; 			//2_00110000
-	GPIO_PORTE_AHB_DIR_R = 0x03;
-	GPIO_PORTF_AHB_DIR_R = 0x0C;			//2_00001110
 	GPIO_PORTH_AHB_DIR_R = 0x0F; 			//2_00001111
 	GPIO_PORTK_DIR_R = 0xFF; 			//2_11111111
 	GPIO_PORTL_DIR_R = 0x00; 			//2_00001111
@@ -79,8 +73,6 @@ void GPIO_Init(void)
 	GPIO_PORTJ_AHB_AFSEL_R = 0x00;
 	GPIO_PORTA_AHB_AFSEL_R = 0x00;
 	GPIO_PORTB_AHB_AFSEL_R = 0x00;
-	GPIO_PORTE_AHB_AFSEL_R = 0x00;
-	GPIO_PORTF_AHB_AFSEL_R = 0x00;
 	GPIO_PORTH_AHB_AFSEL_R = 0x00;
 	GPIO_PORTK_AFSEL_R = 0x00; 
 	GPIO_PORTL_AFSEL_R = 0x00;
@@ -93,8 +85,6 @@ void GPIO_Init(void)
 	GPIO_PORTJ_AHB_DEN_R = 0x03;   	//2_00000011
 	GPIO_PORTA_AHB_DEN_R = 0xF0; 		   	//2_11110000
 	GPIO_PORTB_AHB_DEN_R = 0x30; 		   	//2_00110000
-	GPIO_PORTE_AHB_DEN_R = 0x03;
-	GPIO_PORTF_AHB_DEN_R = 0x0C;
 	GPIO_PORTH_AHB_DEN_R = 0x0F; 		   	//2_00001111
 	GPIO_PORTK_DEN_R = 0xFF; 		   	//2_11111111
 	GPIO_PORTL_DEN_R = 0x0F; 		   	//2_00001111
@@ -154,16 +144,6 @@ void PortC_Output(uint32_t valor)
     GPIO_PORTC_AHB_DATA_R = valor; 
 }
 
-void PortE_Output(uint32_t valor)
-{
-    GPIO_PORTE_AHB_DATA_R = valor; 
-}
-
-void PortF_Output(uint32_t valor)
-{
-    GPIO_PORTF_AHB_DATA_R = valor; 
-}
-
 void PortH_Output(uint32_t valor)
 {
 		uint32_t temp;
@@ -172,6 +152,17 @@ void PortH_Output(uint32_t valor)
     //agora vamos fazer o OR com o valor recebido na função
     temp = temp | valor;
     GPIO_PORTH_AHB_DATA_R = valor;
+}
+
+void PortL_Output(uint32_t valor)
+{
+		uint32_t temp;
+    //para uma escrita amigável nos bits 0 e 1
+		temp = GPIO_PORTL_DATA_R & 0x0f; //2_00001111
+    //agora vamos fazer o OR com o valor recebido na função
+    temp = temp | valor;
+    GPIO_PORTL_DATA_R = valor;
+		
 }
 
 void PortK_Output(uint32_t valor)
@@ -239,87 +230,37 @@ void Desativa_Rs()
 	  GPIO_PORTM_DATA_R = temp; 
 }
 
-void ConfigJ_Interrupts(void)
+void Config_Interrupt_J(void)
 {
-		uint32_t temp=0x00;
+		int temp = 0x0;
 	
 		GPIO_PORTJ_AHB_IM_R = 0x0;
 		
-	
 		temp = temp | GPIO_PORTJ_AHB_IS_R;
 		GPIO_PORTJ_AHB_IS_R = temp;
 		
-	
 		temp = 0x0;
 		temp = temp | GPIO_PORTJ_AHB_IBE_R;
 		GPIO_PORTJ_AHB_IBE_R = temp;
 		
-		
 		temp = 0x00;
 		temp = temp | GPIO_PORTJ_AHB_IEV_R;
 		GPIO_PORTJ_AHB_IEV_R = temp;
-		temp = 0x00;
-		//temp = temp | GPIO_PORTL_IEV_R;
-		//GPIO_PORTL_IEV_R = temp;
 	
 		GPIO_PORTJ_AHB_RIS_R = 0x1;
-		
 	
 		GPIO_PORTJ_AHB_IM_R = 0x0;
-		//GPIO_PORTL_IM_R = 0x0;
-		
 	
 		temp = 0x1;
 		temp = temp | GPIO_PORTJ_AHB_IM_R;
 		GPIO_PORTJ_AHB_IM_R = temp;
-		temp = 0x1;
-		//temp = temp | GPIO_PORTL_IM_R;
-		//GPIO_PORTL_IM_R = temp;
 		
-		NVIC_PRI12_R = 0x20000000;	//2_0010 0000 0000 0000 0000 0000 0000 0000
-		
-		NVIC_EN1_R 	 = 0x00080000; 	//2_0000 0000 0010 1000 0000 0000 0000 0000
+		NVIC_PRI12_R = 0x20000000;
+		NVIC_EN1_R = 0x00080000;
 		
 		temp = 0x1;
 		temp = temp | GPIO_PORTJ_AHB_ICR_R;
 		GPIO_PORTJ_AHB_ICR_R = temp;
 		
-		
-}
-
-void ConfigL_Interrupts(void)
-{
-		uint32_t temp = 0x0;
-	
-		temp = GPIO_PORTL_IM_R;
-		temp = temp & 0xF0;
-		GPIO_PORTL_IM_R = temp;
-		
-		temp = GPIO_PORTL_IS_R;
-		temp = temp & 0xF0;
-		GPIO_PORTL_IS_R = temp;
-	
-		temp = GPIO_PORTL_IBE_R;
-		temp = temp & 0xF0;
-		GPIO_PORTL_IBE_R = temp;
-		
-		temp = 0x00;
-		temp = temp | GPIO_PORTL_IEV_R;
-		GPIO_PORTL_IEV_R = temp;
-	
-		temp = GPIO_PORTL_RIS_R;
-		temp = temp & 0xF0;
-		GPIO_PORTL_RIS_R = temp;
-		
-		temp = GPIO_PORTL_IM_R;
-		temp = temp & 0x0F;
-		GPIO_PORTL_IM_R = temp;
-	
-		NVIC_PRI13_R = 0x00002000;	//2_0000 0000 0000 0000 0010 0000 0000 0000
-		NVIC_EN1_R 	 = 0x00280000; 	//2_0000 0000 0010 1000 0000 0000 0000 0000
-		
-		temp = GPIO_PORTL_ICR_R;
-		temp = temp & 0x0F;
-		GPIO_PORTL_ICR_R = temp;
 }
 
