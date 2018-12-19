@@ -1,7 +1,8 @@
 #TO DO
 - [ ] Create a READ.ME
-- [ ] Stabilize stepper motor
+- [x] Stabilize stepper motor
 - [ ] Create an API for the microcontroller via USB
+- [ ] Create .gitignore file
 
 #NEXT
 - [ ] Study about Image Processing
