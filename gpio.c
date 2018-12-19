@@ -154,17 +154,6 @@ void PortH_Output(uint32_t valor)
     GPIO_PORTH_AHB_DATA_R = valor;
 }
 
-void PortL_Output(uint32_t valor)
-{
-		uint32_t temp;
-    //para uma escrita amigável nos bits 0 e 1
-		temp = GPIO_PORTL_DATA_R & 0x0f; //2_00001111
-    //agora vamos fazer o OR com o valor recebido na função
-    temp = temp | valor;
-    GPIO_PORTL_DATA_R = valor;
-		
-}
-
 void PortK_Output(uint32_t valor)
 {
 		uint32_t temp;
@@ -175,15 +164,13 @@ void PortK_Output(uint32_t valor)
     GPIO_PORTK_DATA_R = valor; 
 }
 
-void PortN_Output(uint32_t valor)
+void PortN_Input(uint32_t valor)
 {
-    uint32_t temp;
-    //vamos zerar somente os bits menos significativos
-    //para uma escrita amigável nos bits 0 e 1
-    temp = GPIO_PORTN_DATA_R & 0xFC;
-    //agora vamos fazer o OR com o valor recebido na função
-    temp = temp | valor;
-    GPIO_PORTN_DATA_R = valor; 
+	uint32_t temp;
+	temp = GPIO_PORTN_DATA_R & 0x03;
+	temp = temp | valor;
+	GPIO_PORTN_DATA_R = valor;
+	
 }
 
 void PortQ_Output(uint32_t valor)
@@ -230,37 +217,5 @@ void Desativa_Rs()
 	  GPIO_PORTM_DATA_R = temp; 
 }
 
-void Config_Interrupt_J(void)
-{
-		int temp = 0x0;
-	
-		GPIO_PORTJ_AHB_IM_R = 0x0;
-		
-		temp = temp | GPIO_PORTJ_AHB_IS_R;
-		GPIO_PORTJ_AHB_IS_R = temp;
-		
-		temp = 0x0;
-		temp = temp | GPIO_PORTJ_AHB_IBE_R;
-		GPIO_PORTJ_AHB_IBE_R = temp;
-		
-		temp = 0x00;
-		temp = temp | GPIO_PORTJ_AHB_IEV_R;
-		GPIO_PORTJ_AHB_IEV_R = temp;
-	
-		GPIO_PORTJ_AHB_RIS_R = 0x1;
-	
-		GPIO_PORTJ_AHB_IM_R = 0x0;
-	
-		temp = 0x1;
-		temp = temp | GPIO_PORTJ_AHB_IM_R;
-		GPIO_PORTJ_AHB_IM_R = temp;
-		
-		NVIC_PRI12_R = 0x20000000;
-		NVIC_EN1_R = 0x00080000;
-		
-		temp = 0x1;
-		temp = temp | GPIO_PORTJ_AHB_ICR_R;
-		GPIO_PORTJ_AHB_ICR_R = temp;
-		
-}
+
 
