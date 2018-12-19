@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <string.h>
 #include "tm4c1294ncpdt.h"
 #include "func.h"
 
@@ -20,12 +19,12 @@ int main(void)
 		uint32_t temp;
 		temp = PortJ_Input();
 		if (temp == 0x01)
-		{
-			Motor_Meio_Horario();
+		{			
+			Motor_Antihorario();
 		}
-		if (temp = 0x02)
+		if (temp == 0x02)
         {
-            Motor_Antihorario();
+					Motor_Horario();
         }
 	}
 }
