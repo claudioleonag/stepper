@@ -22,12 +22,10 @@ int main(void)
 		if (temp == 0x01)
 		{
 			Motor_Meio_Horario();
-			
-			SysTick_Wait1ms(50);			
 		}
-		//temp = 0x00;
+		if (temp = 0x02)
+        {
+            Motor_Antihorario();
+        }
 	}
-	//Motor_Antihorario();
-	//SysTick_Wait1ms(50);
-	
 }
